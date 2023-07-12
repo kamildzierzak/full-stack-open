@@ -1,6 +1,6 @@
 # full-stack-open
 
-- [ ] part 0 - Fundamentals of Web apps
+- [x] part 0 - Fundamentals of Web apps
 - [ ] part 1 - Introduction to React
 - [ ] part 2 - Communicating with server
 - [ ] part 3 - Programming a server with NodeJS and Express
