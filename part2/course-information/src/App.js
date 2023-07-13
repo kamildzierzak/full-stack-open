@@ -16,6 +16,10 @@ const Content = ({ parts }) => {
       {parts.map(part => (
         <Part key={part.id} part={part} />
       ))}
+      <b>
+        total of {parts.reduce((sum, current) => sum + current.exercises, 0)}{' '}
+        exercises
+      </b>
     </>
   )
 }
@@ -50,7 +54,7 @@ const App = () => {
         id: 3,
       },
       {
-        name: 'State of a pancake',
+        name: 'React Pancake',
         exercises: 1,
         id: 4,
       },
