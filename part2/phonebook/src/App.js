@@ -1,4 +1,7 @@
 import { useState } from 'react'
+import { Filter } from './components/Filter'
+import { PersonForm } from './components/PersonForm'
+import { Persons } from './components/Persons'
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -16,27 +19,6 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newPhoneNumber, setNewPhoneNumber] = useState('')
   const [lookingFor, setLookingFor] = useState('')
-
-  const addPerson = event => {
-    event.preventDefault()
-    if (
-      persons.some(
-        person => person.name.toLowerCase() === newName.toLowerCase()
-      )
-    ) {
-      alert(`${newName} is already added to phonebook`)
-    } else {
-      const personObject = {
-        name: newName,
-        phoneNumber: newPhoneNumber,
-        id: persons.length + 1,
-      }
-
-      setPersons(persons.concat(personObject))
-      setNewName('')
-      setNewPhoneNumber('')
-    }
-  }
 
   const handleNameInputChange = event => {
     setNewName(event.target.value)
@@ -57,34 +39,24 @@ const App = () => {
 
   return (
     <div>
-      <div>debug: {newName}</div>
       <h2>Phonebook</h2>
-      <div>
-        filter shown with{' '}
-        <input value={lookingFor} onChange={handleLookingForInputChange} />
-      </div>
-      <h2>add a new</h2>
-      <form onSubmit={addPerson}>
-        <div>
-          name: <input value={newName} onChange={handleNameInputChange} />
-        </div>
-        <div>
-          number:{' '}
-          <input
-            value={newPhoneNumber}
-            onChange={handlePhoneNumberInputChange}
-          />
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
+      <Filter
+        lookingFor={lookingFor}
+        lookingForHandler={handleLookingForInputChange}
+      />
+      <h2>Add a new</h2>
+      <PersonForm
+        persons={persons}
+        setPersons={setPersons}
+        newName={newName}
+        newNameHandler={handleNameInputChange}
+        setNewName={setNewName}
+        newPhoneNumber={newPhoneNumber}
+        setNewPhoneNumber={setNewPhoneNumber}
+        newPhoneNumberHandler={handlePhoneNumberInputChange}
+      />
       <h2>Numbers</h2>
-      {personsToShow.map(person => (
-        <div key={person.id}>
-          {person.name} {person.phoneNumber}
-        </div>
-      ))}
+      <Persons personsToShow={personsToShow} />
     </div>
   )
 }
