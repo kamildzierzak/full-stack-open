@@ -3,9 +3,9 @@ import personService from '../services/persons'
 
 export const Persons = ({ personsToShow, setPersons }) => {
   const deleteHandler = id => {
-    const person = personsToShow.find(person => person.id === id)
+    const personToDelete = personsToShow.find(person => person.id === id)
     const result = window.confirm(
-      `Do you really want to delete ${person.name}?`
+      `Do you really want to delete ${personToDelete.name}?`
     )
 
     if (result) {

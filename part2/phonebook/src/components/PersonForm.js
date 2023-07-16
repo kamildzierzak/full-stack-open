@@ -12,13 +12,34 @@ export const PersonForm = ({
 }) => {
   const addPerson = event => {
     event.preventDefault()
+    const personToUpdate = persons.find(person => person.name === newName)
 
-    if (
-      persons.some(
-        person => person.name.toLowerCase() === newName.toLowerCase()
+    if (personToUpdate) {
+      const result = window.confirm(
+        `${newName} is already added to phonebook, replace the old number with a new one?`
       )
-    ) {
-      alert(`${newName} is already added to phonebook`)
+
+      if (result) {
+        const personObject = { ...personToUpdate, phoneNumber: newPhoneNumber }
+
+        personService
+          .update(personToUpdate.id, personObject)
+          .then(returnedPerson => {
+            setPersons(
+              persons.map(person =>
+                person.id !== returnedPerson.id ? person : returnedPerson
+              )
+            )
+          })
+          .catch(error => {
+            alert(
+              `The person ${personToUpdate.name} was already deleted from the server`
+            )
+            setPersons(
+              persons.filter(person => person.id !== personToUpdate.id)
+            )
+          })
+      }
     } else {
       const personObject = {
         name: newName,
