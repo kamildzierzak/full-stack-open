@@ -1,3 +1,5 @@
+import axios from 'axios'
+
 export const PersonForm = ({
   persons,
   setPersons,
@@ -10,6 +12,7 @@ export const PersonForm = ({
 }) => {
   const addPerson = event => {
     event.preventDefault()
+
     if (
       persons.some(
         person => person.name.toLowerCase() === newName.toLowerCase()
@@ -23,9 +26,13 @@ export const PersonForm = ({
         id: persons.length + 1,
       }
 
-      setPersons(persons.concat(personObject))
-      setNewName('')
-      setNewPhoneNumber('')
+      axios
+        .post('http://localhost:3001/persons', personObject)
+        .then(response => {
+          setPersons(persons.concat(response.data))
+          setNewName('')
+          setNewPhoneNumber('')
+        })
     }
   }
 
