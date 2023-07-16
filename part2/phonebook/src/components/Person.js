@@ -1,7 +1,8 @@
-export const Person = ({ person }) => {
+export const Person = ({ person, deleteHandler }) => {
   return (
     <div key={person.id}>
-      {person.name} {person.phoneNumber}
+      {person.name} {person.phoneNumber}{' '}
+      <button onClick={deleteHandler}>delete</button>
     </div>
   )
 }

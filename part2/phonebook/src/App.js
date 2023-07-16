@@ -29,7 +29,6 @@ const App = () => {
   }
 
   const personsToShow = persons.filter(person => {
-    // return person.name.toLowerCase().startsWith(lookingFor.toLowerCase())
     return person.name.toLowerCase().includes(lookingFor.toLowerCase())
   })
 
@@ -52,7 +51,7 @@ const App = () => {
         newPhoneNumberHandler={handlePhoneNumberInputChange}
       />
       <h2>Numbers</h2>
-      <Persons personsToShow={personsToShow} />
+      <Persons personsToShow={personsToShow} setPersons={setPersons} />
     </div>
   )
 }
