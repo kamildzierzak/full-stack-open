@@ -1,7 +1,7 @@
 import { Person } from './Person'
 import personService from '../services/persons'
 
-export const Persons = ({ personsToShow, setPersons }) => {
+export const Persons = ({ personsToShow, setPersons, setMessage, newName }) => {
   const deleteHandler = id => {
     const personToDelete = personsToShow.find(person => person.id === id)
     const result = window.confirm(
@@ -15,7 +15,13 @@ export const Persons = ({ personsToShow, setPersons }) => {
           setPersons(personsToShow.filter(person => person.id !== id))
         })
         .catch(error => {
-          alert('The person was already deleted from the server')
+          setMessage({
+            text: `Information of ${newName} has already been removed from server`,
+            type: 'error',
+          })
+          setTimeout(() => {
+            setMessage(null)
+          }, 3000)
           setPersons(personsToShow.filter(person => person.id !== id))
         })
     }

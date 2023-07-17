@@ -9,7 +9,7 @@ export const PersonForm = ({
   newPhoneNumber,
   setNewPhoneNumber,
   newPhoneNumberHandler,
-  setInfoMessage,
+  setMessage,
 }) => {
   const addPerson = event => {
     event.preventDefault()
@@ -26,11 +26,12 @@ export const PersonForm = ({
         personService
           .update(personToUpdate.id, personObject)
           .then(returnedPerson => {
-            setInfoMessage(
-              `Person ${personToUpdate.name} was updated successfully`
-            )
+            setMessage({
+              text: `Person ${personToUpdate.name} was updated successfully`,
+              type: 'success',
+            })
             setTimeout(() => {
-              setInfoMessage(null)
+              setMessage(null)
             }, 3000)
             setPersons(
               persons.map(person =>
@@ -39,9 +40,13 @@ export const PersonForm = ({
             )
           })
           .catch(error => {
-            alert(
-              `The person ${personToUpdate.name} was already deleted from the server`
-            )
+            setMessage({
+              text: `Information of ${personToUpdate.name} has already been removed from server`,
+              type: 'error',
+            })
+            setTimeout(() => {
+              setMessage(null)
+            }, 3000)
             setPersons(
               persons.filter(person => person.id !== personToUpdate.id)
             )
@@ -57,9 +62,12 @@ export const PersonForm = ({
         setPersons(persons.concat(returnedPersons))
         setNewName('')
         setNewPhoneNumber('')
-        setInfoMessage(`Added ${personObject.name}`)
+        setMessage({
+          text: `Added ${personObject.name}`,
+          type: 'success',
+        })
         setTimeout(() => {
-          setInfoMessage(null)
+          setMessage(null)
         }, 3000)
       })
     }

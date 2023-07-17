@@ -10,7 +10,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newPhoneNumber, setNewPhoneNumber] = useState('')
   const [lookingFor, setLookingFor] = useState('')
-  const [infoMessage, setInfoMessage] = useState(null)
+  const [message, setMessage] = useState(null)
 
   useEffect(() => {
     personService.getAll().then(initialPersons => {
@@ -37,7 +37,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={infoMessage} />
+      <Notification message={message} />
       <Filter
         lookingFor={lookingFor}
         lookingForHandler={handleLookingForInputChange}
@@ -52,10 +52,15 @@ const App = () => {
         newPhoneNumber={newPhoneNumber}
         setNewPhoneNumber={setNewPhoneNumber}
         newPhoneNumberHandler={handlePhoneNumberInputChange}
-        setInfoMessage={setInfoMessage}
+        setMessage={setMessage}
       />
       <h2>Numbers</h2>
-      <Persons personsToShow={personsToShow} setPersons={setPersons} />
+      <Persons
+        personsToShow={personsToShow}
+        setPersons={setPersons}
+        setMessage={setMessage}
+        newName={newName}
+      />
     </div>
   )
 }

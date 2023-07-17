@@ -19,26 +19,6 @@
       "name": "Mary Poppendieck",
       "number": "39-23-6423122",
       "id": 4
-    },
-    {
-      "name": "A",
-      "phoneNumber": "1234",
-      "id": 5
-    },
-    {
-      "name": "Ad",
-      "phoneNumber": "1234",
-      "id": 6
-    },
-    {
-      "name": "Ada",
-      "phoneNumber": "12345",
-      "id": 7
-    },
-    {
-      "name": "Bada",
-      "phoneNumber": "12",
-      "id": 8
     }
   ]
 }
