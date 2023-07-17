@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { Filter } from './components/Filter'
 import { PersonForm } from './components/PersonForm'
 import { Persons } from './components/Persons'
+import { Notification } from './components/Notification'
 import personService from './services/persons'
 
 const App = () => {
@@ -9,6 +10,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newPhoneNumber, setNewPhoneNumber] = useState('')
   const [lookingFor, setLookingFor] = useState('')
+  const [infoMessage, setInfoMessage] = useState(null)
 
   useEffect(() => {
     personService.getAll().then(initialPersons => {
@@ -35,6 +37,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={infoMessage} />
       <Filter
         lookingFor={lookingFor}
         lookingForHandler={handleLookingForInputChange}
@@ -49,6 +52,7 @@ const App = () => {
         newPhoneNumber={newPhoneNumber}
         setNewPhoneNumber={setNewPhoneNumber}
         newPhoneNumberHandler={handlePhoneNumberInputChange}
+        setInfoMessage={setInfoMessage}
       />
       <h2>Numbers</h2>
       <Persons personsToShow={personsToShow} setPersons={setPersons} />

@@ -9,6 +9,7 @@ export const PersonForm = ({
   newPhoneNumber,
   setNewPhoneNumber,
   newPhoneNumberHandler,
+  setInfoMessage,
 }) => {
   const addPerson = event => {
     event.preventDefault()
@@ -25,6 +26,12 @@ export const PersonForm = ({
         personService
           .update(personToUpdate.id, personObject)
           .then(returnedPerson => {
+            setInfoMessage(
+              `Person ${personToUpdate.name} was updated successfully`
+            )
+            setTimeout(() => {
+              setInfoMessage(null)
+            }, 3000)
             setPersons(
               persons.map(person =>
                 person.id !== returnedPerson.id ? person : returnedPerson
@@ -50,6 +57,10 @@ export const PersonForm = ({
         setPersons(persons.concat(returnedPersons))
         setNewName('')
         setNewPhoneNumber('')
+        setInfoMessage(`Added ${personObject.name}`)
+        setTimeout(() => {
+          setInfoMessage(null)
+        }, 3000)
       })
     }
   }
