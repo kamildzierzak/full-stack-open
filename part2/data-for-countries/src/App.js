@@ -33,7 +33,7 @@ const App = () => {
         lookingFor={lookinFor}
         lookingForHandler={handleLookingForInputChange}
       />
-      <Countries countriesToShow={filteredCountries} />
+      <Countries countries={filteredCountries} />
     </>
   )
 }
