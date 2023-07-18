@@ -4,16 +4,11 @@ import axios from 'axios'
 export const Country = ({ country, show }) => {
   const [showCountry, setShowCountry] = useState(show)
   const [weather, setWeather] = useState(null)
-  const name = country.name.common
-  const capital = country.capital[0]
-  const area = country.area
-  const languages = Object.values(country.languages)
-  const flag = country.flags.png
 
   useEffect(() => {
     if (showCountry) {
       const api_key = process.env.REACT_APP_OPEN_WEATHER_API_KEY
-      const url = `https://api.openweathermap.org/data/2.5/weather?q=${name}&appid=${api_key}&units=metric`
+      const url = `https://api.openweathermap.org/data/2.5/weather?q=${country.name.common}&appid=${api_key}&units=metric`
       axios
         .get(url)
         .then(response => {
@@ -23,13 +18,19 @@ export const Country = ({ country, show }) => {
           console.log(error)
         })
     }
-  }, [showCountry, name])
+  }, [showCountry])
 
   const handleShowClick = () => {
     setShowCountry(!showCountry)
   }
 
   if (showCountry) {
+    let name = country.name.common
+    let capital =
+      country.capital && country.capital[0] ? country.capital[0] : 'No capital'
+    let area = country.area
+    let languages = Object.values(country.languages)
+    let flag = country.flags.png
     return (
       <>
         <hr />
@@ -60,6 +61,7 @@ export const Country = ({ country, show }) => {
       </>
     )
   } else {
+    const name = country.name.common
     return (
       <>
         <p>

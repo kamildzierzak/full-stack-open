@@ -2,7 +2,7 @@
 
 - [x] part 0 - Fundamentals of Web apps
 - [x] part 1 - Introduction to React
-- [ ] part 2 - Communicating with server
+- [x] part 2 - Communicating with server
 - [ ] part 3 - Programming a server with NodeJS and Express
 - [ ] part 4 - Testing Express servers, user administration
 - [ ] part 5 - Testing React apps
