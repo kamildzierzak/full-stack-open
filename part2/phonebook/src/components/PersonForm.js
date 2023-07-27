@@ -40,6 +40,7 @@ export const PersonForm = ({
             )
           })
           .catch(error => {
+            // TODO handle missing number error
             setMessage({
               text: `Information of ${personToUpdate.name} has already been removed from server`,
               type: 'error',
@@ -58,18 +59,29 @@ export const PersonForm = ({
         phoneNumber: newPhoneNumber,
       }
 
-      personService.create(personObject).then(returnedPersons => {
-        setPersons(persons.concat(returnedPersons))
-        setNewName('')
-        setNewPhoneNumber('')
-        setMessage({
-          text: `Added ${personObject.name}`,
-          type: 'success',
+      personService
+        .create(personObject)
+        .then(returnedPersons => {
+          setPersons(persons.concat(returnedPersons))
+          setNewName('')
+          setNewPhoneNumber('')
+          setMessage({
+            text: `Added ${personObject.name}`,
+            type: 'success',
+          })
+          setTimeout(() => {
+            setMessage(null)
+          }, 3000)
         })
-        setTimeout(() => {
-          setMessage(null)
-        }, 3000)
-      })
+        .catch(error => {
+          setMessage({
+            text: error.response.data.error,
+            type: 'error',
+          })
+          setTimeout(() => {
+            setMessage(null)
+          }, 3000)
+        })
     }
   }
 
