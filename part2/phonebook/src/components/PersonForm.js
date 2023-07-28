@@ -40,17 +40,27 @@ export const PersonForm = ({
             )
           })
           .catch(error => {
-            // TODO handle missing number error
-            setMessage({
-              text: `Information of ${personToUpdate.name} has already been removed from server`,
-              type: 'error',
-            })
-            setTimeout(() => {
-              setMessage(null)
-            }, 3000)
-            setPersons(
-              persons.filter(person => person.id !== personToUpdate.id)
-            )
+            // not sure if it is the best way to handle it - solution 4now
+            if (!(error instanceof TypeError)) {
+              setMessage({
+                text: error.response.data.error,
+                type: 'error',
+              })
+              setTimeout(() => {
+                setMessage(null)
+              }, 3000)
+            } else {
+              setMessage({
+                text: `Information of ${personToUpdate.name} has already been removed from server`,
+                type: 'error',
+              })
+              setTimeout(() => {
+                setMessage(null)
+              }, 3000)
+              setPersons(
+                persons.filter(person => person.id !== personToUpdate.id)
+              )
+            }
           })
       }
     } else {
