@@ -14,17 +14,23 @@ beforeEach(async () => {
   }
 })
 
+test('blog posts are returned in JSON format', async () => {
+  await api
+    .get('/api/blogs')
+    .expect(200)
+    .expect('Content-Type', /application\/json/)
+})
+
 test('blog list application returns the correct amount of blog posts', async () => {
   const response = await api.get('/api/blogs')
 
   expect(response.body).toHaveLength(helper.inititalBlogs.length)
 })
 
-test('blog posts are returned in JSON format', async () => {
-  await api
-    .get('/api/blogs')
-    .expect(200)
-    .expect('Content-Type', /application\/json/)
+test('unique identifier property of the blog is names id', async () => {
+  const response = await api.get('/api/blogs')
+
+  expect(response.body[0].id).toBeDefined()
 })
 
 afterAll(async () => {
