@@ -62,6 +62,29 @@ test('HTTP POST request to the /api/blogs URL successfully creates a new blog po
   expect(savedBlog.likes).toEqual(1000)
 })
 
+test('if the likes property is missing from the request, it will default to the value 0', async () => {
+  const newBlog = {
+    title: 'Moving AI governance forward',
+    author: 'OpenAI',
+    url: 'https://openai.com/blog/moving-ai-governance-forward',
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+
+  const response = await api.get('/api/blogs')
+  expect(response.body).toHaveLength(helper.inititalBlogs.length + 1)
+
+  const savedBlog = await Blog.findOne({
+    title: newBlog.title,
+    author: newBlog.author,
+  })
+  expect(savedBlog.likes).toEqual(0)
+})
+
 afterAll(async () => {
   await mongoose.connection.close()
 })
