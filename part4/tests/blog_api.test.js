@@ -85,6 +85,32 @@ test('if the likes property is missing from the request, it will default to the 
   expect(savedBlog.likes).toEqual(0)
 })
 
+test('if the title is missing from the request data, the backend responds to the request with the status code 400 Bad Request', async () => {
+  const newBlog = {
+    author: 'OpenAI',
+    url: 'https://openai.com/blog/moving-ai-governance-forward',
+    likes: 12345,
+  }
+
+  const response = await api.post('/api/blogs').send(newBlog)
+
+  expect(response.status).toBe(400)
+  expect(response.body).toEqual({ error: 'title is missing' })
+})
+
+test('if the url is missing from the request data, the backend responds to the request with the status code 400 Bad Request', async () => {
+  const newBlog = {
+    title: 'Moving AI governance forward',
+    author: 'OpenAI',
+    likes: 12345,
+  }
+
+  const response = await api.post('/api/blogs').send(newBlog)
+
+  expect(response.status).toBe(400)
+  expect(response.body).toEqual({ error: 'url is missing' })
+})
+
 afterAll(async () => {
   await mongoose.connection.close()
 })
