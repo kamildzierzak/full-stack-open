@@ -33,6 +33,35 @@ test('unique identifier property of the blog is names id', async () => {
   expect(response.body[0].id).toBeDefined()
 })
 
+test('HTTP POST request to the /api/blogs URL successfully creates a new blog post', async () => {
+  const newBlog = {
+    title: 'Thinking, Fast and Slow',
+    author: 'Daniel Kahneman',
+    url: 'https://en.wikipedia.org/wiki/Thinking,_Fast_and_Slow',
+    likes: 1000,
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+
+  const response = await api.get('/api/blogs')
+  expect(response.body).toHaveLength(helper.inititalBlogs.length + 1)
+
+  const savedBlog = await Blog.findOne({
+    title: newBlog.title,
+    author: newBlog.author,
+  })
+  expect(savedBlog.title).toContain('Thinking, Fast and Slow')
+  expect(savedBlog.author).toContain('Daniel Kahneman')
+  expect(savedBlog.url).toContain(
+    'https://en.wikipedia.org/wiki/Thinking,_Fast_and_Slow'
+  )
+  expect(savedBlog.likes).toEqual(1000)
+})
+
 afterAll(async () => {
   await mongoose.connection.close()
 })
