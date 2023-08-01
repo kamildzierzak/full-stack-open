@@ -120,6 +120,44 @@ describe('deletion of a blog', () => {
 
     expect(response.status).toBe(204)
   })
+
+  describe('update of a blog', () => {
+    test('succeeds with valid data', async () => {
+      const fakeBody = {
+        title: 'Type wars',
+        author: 'Robert C. Martin',
+        url: 'http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html',
+        likes: 111,
+      }
+
+      const response = await api
+        .put('/api/blogs/5a422bc61b54a676234d17fc')
+        .send(fakeBody)
+
+      const updatedBlog = await Blog.findOne({
+        _id: '5a422bc61b54a676234d17fc',
+      })
+      console.log(response.body)
+      console.log(updatedBlog)
+
+      expect(response.body.likes).toEqual(111)
+      expect(updatedBlog.likes).toEqual(111)
+    })
+
+    test('fails with status code 400 if invalid data', async () => {
+      const fakeBody = {
+        title: 'Type wars',
+        url: 'http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html',
+        likes: 111,
+      }
+
+      const response = await api
+        .put('/api/blogs/5a422bc61b54a676234d17fc')
+        .send(fakeBody)
+
+      expect(response.status).toBe(400)
+    })
+  })
 })
 
 afterAll(async () => {
