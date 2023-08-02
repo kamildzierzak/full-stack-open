@@ -214,6 +214,72 @@ describe('when there is initially one user in db', () => {
   })
 })
 
+describe('check restrictions to creating new users', () => {
+  test('creation fails with proper status code and message if username is not given', async () => {
+    const newUser = {
+      name: 'Superuser',
+      password: 'qwerty',
+    }
+
+    const result = await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+
+    expect(result.body.error).toMatch(/User validation failed:/)
+  })
+
+  test('creation fails with proper status code and message if given username is too short', async () => {
+    const newUser = {
+      username: 'ab',
+      name: 'Superuser',
+      password: 'qwerty',
+    }
+
+    const result = await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+
+    expect(result.body.error).toMatch(/User validation failed:/)
+  })
+
+  test('creation fails with proper status code and message if password is not given', async () => {
+    const newUser = {
+      username: 'scooby',
+      name: 'scooby',
+    }
+
+    const result = await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+
+    expect(result.body.error).toContain('password is missing')
+  })
+
+  test('creation fails with proper status code and message if given password is too short', async () => {
+    const newUser = {
+      username: 'ilikerain',
+      name: 'RainLover',
+      password: '12',
+    }
+
+    const result = await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(403)
+      .expect('Content-Type', /application\/json/)
+
+    expect(result.body.error).toContain(
+      'password must be at least 3 characters long'
+    )
+  })
+})
+
 afterAll(async () => {
   await mongoose.connection.close()
 })
