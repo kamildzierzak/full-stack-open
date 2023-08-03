@@ -2,8 +2,9 @@ POST http://localhost:3003/api/blogs
 Content-Type: application/json
 
 {
-  "title": "My Second Blog",
+  "title": "My First Blog",
   "author": "AddictedToPasta",
   "url" : "www.waitwhat.com",
-  "likes" : "32"
+  "likes" : "12",
+  "userId": "64cbf7a859c54ae456f8791e"
 }
