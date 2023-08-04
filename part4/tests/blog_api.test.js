@@ -8,6 +8,26 @@ const api = supertest(app)
 const Blog = require('../models/blog')
 const User = require('../models/user')
 
+let authenticationToken
+
+beforeAll(async () => {
+  await User.deleteMany({})
+
+  const passwordHash = await bcrypt.hash('qwerty', 10)
+  await User.create({
+    username: 'test',
+    name: 'tester',
+    passwordHash,
+  })
+
+  const response = await api.post('/api/login').send({
+    username: 'test',
+    password: 'qwerty',
+  })
+
+  authenticationToken = response.body.token
+})
+
 beforeEach(async () => {
   await Blog.deleteMany({})
 
@@ -20,18 +40,23 @@ beforeEach(async () => {
 test('blog posts are returned in JSON format', async () => {
   await api
     .get('/api/blogs')
+    .set('Authorization', `Bearer ${authenticationToken}`)
     .expect(200)
     .expect('Content-Type', /application\/json/)
 })
 
 test('blog list application returns the correct amount of blog posts', async () => {
-  const response = await api.get('/api/blogs')
+  const response = await api
+    .get('/api/blogs')
+    .set('Authorization', `Bearer ${authenticationToken}`)
 
   expect(response.body).toHaveLength(helper.inititalBlogs.length)
 })
 
 test('unique identifier property of the blog is named id', async () => {
-  const response = await api.get('/api/blogs')
+  const response = await api
+    .get('/api/blogs')
+    .set('Authorization', `Bearer ${authenticationToken}`)
 
   expect(response.body[0].id).toBeDefined()
 })
@@ -47,11 +72,14 @@ describe('addition of a new blog', () => {
 
     await api
       .post('/api/blogs')
+      .set('Authorization', `Bearer ${authenticationToken}`)
       .send(newBlog)
       .expect(201)
       .expect('Content-Type', /application\/json/)
 
-    const response = await api.get('/api/blogs')
+    const response = await api
+      .get('/api/blogs')
+      .set('Authorization', `Bearer ${authenticationToken}`)
     expect(response.body).toHaveLength(helper.inititalBlogs.length + 1)
 
     const savedBlog = await Blog.findOne({
@@ -66,6 +94,17 @@ describe('addition of a new blog', () => {
     expect(savedBlog.likes).toEqual(1000)
   })
 
+  test('HTTP POST request to the /api/blogs URL fails after trying to create a new blog without token', async () => {
+    const newBlog = {
+      title: 'Thinking, Fast and Slow',
+      author: 'Daniel Kahneman',
+      url: 'https://en.wikipedia.org/wiki/Thinking,_Fast_and_Slow',
+      likes: 1000,
+    }
+
+    await api.post('/api/blogs').send(newBlog).expect(401)
+  })
+
   test('if the likes property is missing from the request, it will default to the value 0', async () => {
     const newBlog = {
       title: 'Moving AI governance forward',
@@ -75,11 +114,14 @@ describe('addition of a new blog', () => {
 
     await api
       .post('/api/blogs')
+      .set('Authorization', `Bearer ${authenticationToken}`)
       .send(newBlog)
       .expect(201)
       .expect('Content-Type', /application\/json/)
 
-    const response = await api.get('/api/blogs')
+    const response = await api
+      .get('/api/blogs')
+      .set('Authorization', `Bearer ${authenticationToken}`)
     expect(response.body).toHaveLength(helper.inititalBlogs.length + 1)
 
     const savedBlog = await Blog.findOne({
@@ -96,7 +138,10 @@ describe('addition of a new blog', () => {
       likes: 12345,
     }
 
-    const response = await api.post('/api/blogs').send(newBlog)
+    const response = await api
+      .post('/api/blogs')
+      .set('Authorization', `Bearer ${authenticationToken}`)
+      .send(newBlog)
 
     expect(response.status).toBe(400)
     expect(response.body).toEqual({ error: 'title is missing' })
@@ -109,7 +154,10 @@ describe('addition of a new blog', () => {
       likes: 12345,
     }
 
-    const response = await api.post('/api/blogs').send(newBlog)
+    const response = await api
+      .post('/api/blogs')
+      .set('Authorization', `Bearer ${authenticationToken}`)
+      .send(newBlog)
 
     expect(response.status).toBe(400)
     expect(response.body).toEqual({ error: 'url is missing' })
@@ -118,45 +166,63 @@ describe('addition of a new blog', () => {
 
 describe('deletion of a blog', () => {
   test('succeeds with status code 204 if id is valid', async () => {
-    const response = await api.delete('/api/blogs/5a422a851b54a676234d17f7')
+    const newBlog = {
+      title: 'Thinking, Fast and Slow',
+      author: 'Daniel Kahneman',
+      url: 'https://en.wikipedia.org/wiki/Thinking,_Fast_and_Slow',
+      likes: 1000,
+    }
+
+    const newBlogResponse = await api
+      .post('/api/blogs')
+      .set('Authorization', `Bearer ${authenticationToken}`)
+      .send(newBlog)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+
+    const response = await api
+      .delete(`/api/blogs/${newBlogResponse.body.id}`)
+      .set('Authorization', `Bearer ${authenticationToken}`)
 
     expect(response.status).toBe(204)
   })
+})
 
-  describe('update of a blog', () => {
-    test('succeeds with valid data', async () => {
-      const fakeBody = {
-        title: 'Type wars',
-        author: 'Robert C. Martin',
-        url: 'http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html',
-        likes: 111,
-      }
+describe('update of a blog', () => {
+  test('succeeds with valid data', async () => {
+    const fakeBody = {
+      title: 'Type wars',
+      author: 'Robert C. Martin',
+      url: 'http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html',
+      likes: 111,
+    }
 
-      const response = await api
-        .put('/api/blogs/5a422bc61b54a676234d17fc')
-        .send(fakeBody)
+    const response = await api
+      .put('/api/blogs/5a422bc61b54a676234d17fc')
+      .set('Authorization', `Bearer ${authenticationToken}`)
+      .send(fakeBody)
 
-      const updatedBlog = await Blog.findOne({
-        _id: '5a422bc61b54a676234d17fc',
-      })
-
-      expect(response.body.likes).toEqual(111)
-      expect(updatedBlog.likes).toEqual(111)
+    const updatedBlog = await Blog.findOne({
+      _id: '5a422bc61b54a676234d17fc',
     })
 
-    test('fails with status code 400 if invalid data', async () => {
-      const fakeBody = {
-        title: 'Type wars',
-        url: 'http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html',
-        likes: 111,
-      }
+    expect(response.body.likes).toEqual(111)
+    expect(updatedBlog.likes).toEqual(111)
+  })
 
-      const response = await api
-        .put('/api/blogs/5a422bc61b54a676234d17fc')
-        .send(fakeBody)
+  test('fails with status code 400 if invalid data', async () => {
+    const fakeBody = {
+      title: 'Type wars',
+      url: 'http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html',
+      likes: 111,
+    }
 
-      expect(response.status).toBe(400)
-    })
+    const response = await api
+      .put('/api/blogs/5a422bc61b54a676234d17fc')
+      .set('Authorization', `Bearer ${authenticationToken}`)
+      .send(fakeBody)
+
+    expect(response.status).toBe(400)
   })
 })
 
