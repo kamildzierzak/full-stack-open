@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
+import { Notification } from './components/Notification'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
@@ -11,6 +12,7 @@ const App = () => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
+  const [message, setMessage] = useState(null)
 
   useEffect(() => {
     if (user !== null) {
@@ -43,6 +45,13 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch (exception) {
+      setMessage({
+        text: `Wrong username or password`,
+        type: 'error',
+      })
+      setTimeout(() => {
+        setMessage(null)
+      }, 5000)
       console.log(exception)
     }
   }
@@ -53,6 +62,13 @@ const App = () => {
     try {
       window.localStorage.removeItem('loggedBloglistUser')
       setUser(null)
+      setMessage({
+        text: 'You have been successfully logged out.',
+        type: 'success',
+      })
+      setTimeout(() => {
+        setMessage(null)
+      }, 5000)
     } catch (exception) {
       console.log(exception)
     }
@@ -61,18 +77,36 @@ const App = () => {
   const handleCreate = async event => {
     event.preventDefault()
 
-    const newBlog = {
-      title,
-      author,
-      url,
-    }
-
     try {
-      blogService.create(newBlog)
+      const newBlog = {
+        title,
+        author,
+        url,
+      }
+
+      await blogService.create(newBlog)
+
+      setMessage({
+        text: `a new blog ${title} by ${author} added`,
+        type: 'success',
+      })
+
       setTitle('')
       setAuthor('')
       setUrl('')
+
+      setTimeout(() => {
+        setMessage(null)
+      }, 5000)
     } catch (exception) {
+      setMessage({
+        text: `Title, author and url must be provided`,
+        type: 'error',
+      })
+
+      setTimeout(() => {
+        setMessage(null)
+      }, 5000)
       console.log(exception)
     }
   }
@@ -80,6 +114,7 @@ const App = () => {
   const loginForm = () => (
     <div>
       <h2>Log in to application</h2>
+      <Notification message={message} />
       <form onSubmit={handleLogin}>
         <div>
           username
@@ -146,6 +181,7 @@ const App = () => {
 
   return (
     <div>
+      <Notification message={message} />
       <h2>blogs</h2>
       <p>
         {user.name} logged in{' '}
