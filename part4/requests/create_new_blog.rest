@@ -3,8 +3,8 @@ Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjY0Y2Q0NjkyZDAxODE0NDI5NTk5ZWU0NiIsImlhdCI6MTY5MTE3NDU2Nn0.OWycKtR-pJy4-95L6uieuLPuTMaB3JGUwCZxJtXArro
 
 {
-  "title": "Test",
-  "author": "ILikePizza",
+  "title": "Test2",
+  "author": "Me",
   "url" : "www.waitwhat.com",
-  "likes" : "123"
+  "likes" : "11"
 }
