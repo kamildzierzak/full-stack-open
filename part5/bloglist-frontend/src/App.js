@@ -43,7 +43,7 @@ const App = () => {
       setUser(user)
     } catch (exception) {
       setMessage({
-        text: `Wrong username or password`,
+        text: 'Wrong username or password',
         type: 'error',
       })
       setTimeout(() => {
@@ -90,7 +90,7 @@ const App = () => {
       }, 5000)
     } catch (exception) {
       setMessage({
-        text: `Title, author and url must be provided`,
+        text: 'Title, author and url must be provided',
         type: 'error',
       })
 
@@ -108,7 +108,7 @@ const App = () => {
       setBlogs(updatedBlogs)
     } catch (exception) {
       setMessage({
-        text: `Something went wrong with liking :(`,
+        text: 'Something went wrong with liking :(',
         type: 'error',
       })
 
@@ -135,7 +135,7 @@ const App = () => {
       }, 5000)
     } catch (exception) {
       setMessage({
-        text: `Cannot delete`,
+        text: 'Cannot delete',
         type: 'error',
       })
 
