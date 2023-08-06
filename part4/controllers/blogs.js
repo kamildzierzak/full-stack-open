@@ -59,7 +59,7 @@ blogsRouter.delete('/:id', async (request, response) => {
 blogsRouter.put('/:id', async (request, response) => {
   const body = request.body
 
-  if (!body.title || !body.author || !body.url || !body.likes) {
+  if (!body.title || !body.author || !body.url || !body.likes || !body.user) {
     return response.status(400).send({ error: 'missing fields' })
   }
 
@@ -68,6 +68,7 @@ blogsRouter.put('/:id', async (request, response) => {
     author: body.author,
     url: body.url,
     likes: body.likes,
+    user: body.user.id,
   }
 
   const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, blog, {

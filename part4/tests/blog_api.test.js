@@ -195,6 +195,7 @@ describe('update of a blog', () => {
       author: 'Robert C. Martin',
       url: 'http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html',
       likes: 111,
+      user: '64cfa75fd0066631f20e643a',
     }
 
     const response = await api

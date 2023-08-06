@@ -14,8 +14,13 @@ const App = () => {
   const blogFormRef = useRef()
 
   useEffect(() => {
+    const getBlogs = async () => {
+      const blogs = await blogService.getAll()
+      setBlogs(blogs)
+    }
+
     if (user !== null) {
-      blogService.getAll().then(blogs => setBlogs(blogs))
+      getBlogs()
     }
   }, [user])
 
@@ -95,6 +100,23 @@ const App = () => {
     }
   }
 
+  const updateLikes = async (id, blogObject) => {
+    try {
+      await blogService.update(id, blogObject)
+      const updatedBlogs = await blogService.getAll()
+      setBlogs(updatedBlogs)
+    } catch (exception) {
+      setMessage({
+        text: `Something went wrong with liking :(`,
+        type: 'error',
+      })
+
+      setTimeout(() => {
+        setMessage(null)
+      }, 5000)
+    }
+  }
+
   if (user === null) {
     return <LoginForm loginUser={handleLogin} message={message} />
   }
@@ -114,7 +136,7 @@ const App = () => {
       </Togglable>
       <br />
       {blogs.map(blog => (
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog} updateLikes={updateLikes} />
       ))}
     </div>
   )

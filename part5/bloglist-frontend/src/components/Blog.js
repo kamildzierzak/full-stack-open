@@ -1,7 +1,17 @@
 import { useState } from 'react'
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, updateLikes }) => {
   const [visible, setVisible] = useState(false)
+
+  const incrementLike = blog => {
+    updateLikes(blog.id, {
+      user: blog.user.id,
+      likes: (blog.likes += 1),
+      author: blog.author,
+      title: blog.title,
+      url: blog.url,
+    })
+  }
 
   const blogStyle = {
     paddingTop: 10,
@@ -21,7 +31,8 @@ const Blog = ({ blog }) => {
         <div>
           <p>{blog.url}</p>
           <p>
-            likes {blog.likes} <button>like</button>
+            likes {blog.likes}{' '}
+            <button onClick={() => incrementLike(blog)}>like</button>
           </p>
           <p>{blog.user.name}</p>
         </div>
