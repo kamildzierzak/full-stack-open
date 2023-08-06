@@ -76,6 +76,7 @@ const App = () => {
     try {
       blogFormRef.current.toggleVisibility()
       const newBlog = await blogService.create(blogObject)
+
       const updatedBlogs = await blogService.getAll()
       setBlogs(updatedBlogs)
 
@@ -117,6 +118,33 @@ const App = () => {
     }
   }
 
+  const deleteBlog = async id => {
+    try {
+      await blogService.deleteOne(id)
+
+      const updatedBlogs = await blogService.getAll()
+      setBlogs(updatedBlogs)
+
+      setMessage({
+        text: `blog with id: ${id} has been deleted`,
+        type: 'success',
+      })
+
+      setTimeout(() => {
+        setMessage(null)
+      }, 5000)
+    } catch (exception) {
+      setMessage({
+        text: `Cannot delete`,
+        type: 'error',
+      })
+
+      setTimeout(() => {
+        setMessage(null)
+      }, 5000)
+    }
+  }
+
   if (user === null) {
     return <LoginForm loginUser={handleLogin} message={message} />
   }
@@ -138,7 +166,13 @@ const App = () => {
       {blogs
         .sort((blogA, blogB) => blogB.likes - blogA.likes)
         .map(blog => (
-          <Blog key={blog.id} blog={blog} updateLikes={updateLikes} />
+          <Blog
+            key={blog.id}
+            blog={blog}
+            updateLikes={updateLikes}
+            deleteBlog={deleteBlog}
+            user={user}
+          />
         ))}
     </div>
   )

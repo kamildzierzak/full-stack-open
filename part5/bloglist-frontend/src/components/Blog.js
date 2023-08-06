@@ -1,9 +1,9 @@
 import { useState } from 'react'
 
-const Blog = ({ blog, updateLikes }) => {
-  const [visible, setVisible] = useState(false)
+const Blog = ({ blog, updateLikes, deleteBlog, user }) => {
+  const [visibleDetails, setVisibleDetails] = useState(false)
 
-  const incrementLike = blog => {
+  const incrementLikes = blog => {
     updateLikes(blog.id, {
       user: blog.user.id,
       likes: (blog.likes += 1),
@@ -11,6 +11,16 @@ const Blog = ({ blog, updateLikes }) => {
       title: blog.title,
       url: blog.url,
     })
+  }
+
+  const removeBlog = blog => {
+    const result = window.confirm(
+      `Do you really want to remove ${blog.name} by ${blog.author}?`
+    )
+
+    if (result) {
+      deleteBlog(blog.id)
+    }
   }
 
   const blogStyle = {
@@ -21,20 +31,29 @@ const Blog = ({ blog, updateLikes }) => {
     marginBottom: 5,
   }
 
+  const deleteButtonStyle = {
+    backgroundColor: '#ff0040 ',
+  }
+
   return (
     <div style={blogStyle}>
       <div>
         {blog.title} {blog.author}{' '}
-        <button onClick={() => setVisible(!visible)}>view</button>
+        <button onClick={() => setVisibleDetails(!visibleDetails)}>view</button>
       </div>
-      {visible && (
+      {visibleDetails && (
         <div>
           <p>{blog.url}</p>
           <p>
             likes {blog.likes}{' '}
-            <button onClick={() => incrementLike(blog)}>like</button>
+            <button onClick={() => incrementLikes(blog)}>like</button>
           </p>
           <p>{blog.user.name}</p>
+          {user.username === blog.user.username ? (
+            <button style={deleteButtonStyle} onClick={() => removeBlog(blog)}>
+              remove
+            </button>
+          ) : null}
         </div>
       )}
     </div>

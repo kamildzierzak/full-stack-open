@@ -6,5 +6,5 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb
   "title": "Test2",
   "author": "Me",
   "url" : "www.waitwhat.com",
-  "likes" : "11"
+  "likes" : 13
 }
