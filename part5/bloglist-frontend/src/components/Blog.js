@@ -37,12 +37,12 @@ const Blog = ({ blog, updateLikes, deleteBlog, user }) => {
 
   return (
     <div style={blogStyle}>
-      <div>
+      <div className="blogBasicInfo">
         {blog.title} {blog.author}{' '}
         <button onClick={() => setVisibleDetails(!visibleDetails)}>view</button>
       </div>
       {visibleDetails && (
-        <div>
+        <div className="blogDetailedInfo">
           <p>{blog.url}</p>
           <p>
             likes {blog.likes}{' '}
