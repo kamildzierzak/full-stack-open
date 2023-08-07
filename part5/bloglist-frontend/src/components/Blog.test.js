@@ -5,6 +5,8 @@ import userEvent from '@testing-library/user-event'
 import Blog from './Blog'
 
 describe('<Blog/>', () => {
+  let mockUpdateLikesHandler
+
   beforeEach(() => {
     const user = {
       username: 'test',
@@ -20,7 +22,11 @@ describe('<Blog/>', () => {
       url: 'www.cheeselikers.com',
     }
 
-    render(<Blog blog={blog} user={user} />)
+    mockUpdateLikesHandler = jest.fn()
+
+    render(
+      <Blog blog={blog} user={user} updateLikes={mockUpdateLikesHandler} />
+    )
   })
 
   test('renders the title and author of the blog, but does not render url and number of likes by default', async () => {
@@ -43,5 +49,16 @@ describe('<Blog/>', () => {
 
     expect(url).toBeDefined()
     expect(likes).toBeDefined()
+  })
+
+  test('like button is clicked twice, the event handler received by the component as props is called twice', async () => {
+    const user = userEvent.setup()
+    const viewButton = screen.getByText('view')
+    await user.click(viewButton)
+
+    const likeButton = screen.getByText('like')
+    await user.dblClick(likeButton)
+
+    expect(mockUpdateLikesHandler.mock.calls).toHaveLength(2)
   })
 })
