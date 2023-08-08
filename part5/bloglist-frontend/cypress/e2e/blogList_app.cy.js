@@ -36,4 +36,22 @@ describe('Blog app', function () {
         .should('have.css', 'color', 'rgb(255, 0, 0)')
     })
   })
+
+  describe('When logged in', function () {
+    beforeEach(function () {
+      cy.get('#username').type('testme')
+      cy.get('#password').type('test')
+      cy.get('#login-button').click()
+    })
+
+    it('A blog can be created', function () {
+      cy.contains('New blog').click()
+      cy.get('#title').type('Do you really like pizza?')
+      cy.get('#author').type('pizzaLover')
+      cy.get('#url').type('www.pizza4ever.com')
+      cy.get('#create-button').click()
+      cy.contains('a new blog Do you really like pizza? by pizzaLover added')
+      cy.get('#blogs').contains('Do you really like pizza? pizzaLover')
+    })
+  })
 })
