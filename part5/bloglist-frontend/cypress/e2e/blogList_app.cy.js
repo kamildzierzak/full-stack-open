@@ -2,12 +2,21 @@ describe('Blog app', function () {
   beforeEach(function () {
     cy.visit('')
     cy.request('POST', `${Cypress.env('BACKEND')}/testing/reset`)
-    const user = {
+
+    const user1 = {
       name: 'Test Me',
       username: 'testme',
       password: 'test',
     }
-    cy.request('POST', `${Cypress.env('BACKEND')}/users`, user)
+
+    const user2 = {
+      name: 'User',
+      username: 'user',
+      password: 'use',
+    }
+
+    cy.request('POST', `${Cypress.env('BACKEND')}/users`, user1)
+    cy.request('POST', `${Cypress.env('BACKEND')}/users`, user2)
   })
 
   it('Login form is shown', function () {
@@ -40,9 +49,6 @@ describe('Blog app', function () {
   describe('When logged in', function () {
     beforeEach(function () {
       cy.login({ username: 'testme', password: 'test' })
-      // cy.get('#username').type('testme')
-      // cy.get('#password').type('test')
-      // cy.get('#login-button').click()
       cy.createBlog({
         title: 'Do you like me?',
         author: 'pizzaLover',
@@ -83,6 +89,26 @@ describe('Blog app', function () {
       cy.get('.blogDetailedInfo').get('#deleteButton').as('deleteButton')
       cy.get('@deleteButton').click()
       cy.get('@blog').should('not.exist')
+    })
+
+    it('A remove blog button should be visible only for the creator', function () {
+      cy.login({ username: 'user', password: 'use' })
+      cy.createBlog({
+        title: 'User is my creator!',
+        author: 'someGuy',
+        url: 'www.user4ever.com',
+        user: {
+          name: 'User',
+          username: 'user',
+          password: 'use',
+        },
+      })
+      cy.login({ username: 'testme', password: 'test' })
+
+      cy.get('#blogs').contains('User is my creator! someGuy').as('blog')
+      cy.get('@blog').parent().find('button').as('viewButton')
+      cy.get('@viewButton').click()
+      cy.get('.blogDetailedInfo').get('#deleteButton').should('not.exist')
     })
   })
 })
