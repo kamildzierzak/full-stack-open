@@ -52,7 +52,11 @@ const Blog = ({ blog, updateLikes, deleteBlog, user }) => {
           </p>
           <p>{blog.user.name}</p>
           {user.username === blog.user.username ? (
-            <button style={deleteButtonStyle} onClick={() => removeBlog(blog)}>
+            <button
+              id="deleteButton"
+              style={deleteButtonStyle}
+              onClick={() => removeBlog(blog)}
+            >
               remove
             </button>
           ) : null}

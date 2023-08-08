@@ -43,6 +43,16 @@ describe('Blog app', function () {
       // cy.get('#username').type('testme')
       // cy.get('#password').type('test')
       // cy.get('#login-button').click()
+      cy.createBlog({
+        title: 'Do you like me?',
+        author: 'pizzaLover',
+        url: 'www.like.me',
+        user: {
+          name: 'Test Me',
+          username: 'testme',
+          password: 'test',
+        },
+      })
     })
 
     it('A blog can be created', function () {
@@ -56,12 +66,6 @@ describe('Blog app', function () {
     })
 
     it('A blog can be liked', function () {
-      cy.createBlog({
-        title: 'Do you like me?',
-        author: 'pizzaLover',
-        url: 'www.like.me',
-      })
-
       cy.get('#blogs')
         .contains('Do you like me? pizzaLover')
         .parent()
@@ -70,6 +74,15 @@ describe('Blog app', function () {
       cy.get('@viewButton').click()
       cy.get('.blogDetailedInfo').get('#likeButton').as('likeButton')
       cy.get('@likeButton').click()
+    })
+
+    it('A blog can be deleted', function () {
+      cy.get('#blogs').contains('Do you like me? pizzaLover').as('blog')
+      cy.get('@blog').parent().find('button').as('viewButton')
+      cy.get('@viewButton').click()
+      cy.get('.blogDetailedInfo').get('#deleteButton').as('deleteButton')
+      cy.get('@deleteButton').click()
+      cy.get('@blog').should('not.exist')
     })
   })
 })

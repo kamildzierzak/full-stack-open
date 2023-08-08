@@ -20,11 +20,11 @@ Cypress.Commands.add('login', ({ username, password }) => {
   })
 })
 
-Cypress.Commands.add('createBlog', ({ title, author, url }) => {
+Cypress.Commands.add('createBlog', ({ title, author, url, user }) => {
   cy.request({
     url: `${Cypress.env('BACKEND')}/blogs`,
     method: 'POST',
-    body: { title, author, url },
+    body: { title, author, url, user },
     headers: {
       Authorization: `Bearer ${
         JSON.parse(localStorage.getItem('loggedBloglistUser')).token
