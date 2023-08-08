@@ -53,6 +53,7 @@ describe('Blog app', function () {
         title: 'Do you like me?',
         author: 'pizzaLover',
         url: 'www.like.me',
+        likes: 1,
         user: {
           name: 'Test Me',
           username: 'testme',
@@ -109,6 +110,37 @@ describe('Blog app', function () {
       cy.get('@blog').parent().find('button').as('viewButton')
       cy.get('@viewButton').click()
       cy.get('.blogDetailedInfo').get('#deleteButton').should('not.exist')
+    })
+
+    it('Blogs are ordered according to likes, with the most likes being first', function () {
+      cy.createBlog({
+        title: 'I should be first!',
+        author: 'winner',
+        url: 'www.win.com',
+        likes: 2,
+        user: {
+          name: 'Test Me',
+          username: 'testme',
+          password: 'test',
+        },
+      })
+      cy.get('#blogs > div')
+        .eq(0)
+        .should('contain', 'I should be first! winner')
+        .as('exWinner')
+      cy.get('#blogs > div')
+        .eq(1)
+        .should('contain', 'Do you like me? pizzaLover')
+        .as('newWinner')
+      cy.get('@newWinner').find('button').as('viewButton')
+      cy.get('@viewButton').click()
+      cy.get('.blogDetailedInfo').get('#likeButton').as('likeButton')
+      cy.get('@likeButton').click()
+      cy.get('@likeButton').click()
+      cy.wait(2000)
+      cy.get('#blogs > div')
+        .eq(0)
+        .should('contain', 'Do you like me? pizzaLover')
     })
   })
 })
