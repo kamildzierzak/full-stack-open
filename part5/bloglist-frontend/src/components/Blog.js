@@ -46,7 +46,9 @@ const Blog = ({ blog, updateLikes, deleteBlog, user }) => {
           <p>{blog.url}</p>
           <p>
             likes {blog.likes}{' '}
-            <button onClick={() => incrementLikes(blog)}>like</button>
+            <button id="likeButton" onClick={() => incrementLikes(blog)}>
+              like
+            </button>
           </p>
           <p>{blog.user.name}</p>
           {user.username === blog.user.username ? (
