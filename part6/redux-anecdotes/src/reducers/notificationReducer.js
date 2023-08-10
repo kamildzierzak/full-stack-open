@@ -9,8 +9,12 @@ const notificationSlice = createSlice({
     createNotification(state, action) {
       return action.payload
     },
+    removeNotification() {
+      return initialState
+    },
   },
 })
 
-export const { createNotification } = notificationSlice.actions
+export const { createNotification, removeNotification } =
+  notificationSlice.actions
 export default notificationSlice.reducer
