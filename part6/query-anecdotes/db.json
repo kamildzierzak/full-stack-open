@@ -37,8 +37,13 @@
     },
     {
       "content": "Lorem ipsum dolor",
-      "votes": 0,
+      "votes": 47,
       "id": "ONwDzHP"
+    },
+    {
+      "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam",
+      "votes": 17,
+      "id": "lZC4QUS"
     }
   ]
 }
