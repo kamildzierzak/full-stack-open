@@ -13,7 +13,6 @@ const App = () => {
     isLoading,
     isError,
     data: anecdotes,
-    error,
   } = useQuery('anecdotes', getAnecdotes, {
     retry: 1,
   })
