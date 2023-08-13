@@ -10,6 +10,9 @@ const AnecdoteForm = () => {
     onSuccess: () => {
       queryClient.invalidateQueries('anecdotes')
     },
+    onError: error => {
+      dispatch({ type: 'SET', payload: error.response.data.error })
+    },
   })
 
   const onCreate = event => {

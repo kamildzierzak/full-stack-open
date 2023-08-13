@@ -6,7 +6,7 @@
 - [x] part 3 - Programming a server with NodeJS and Express
 - [x] part 4 - Testing Express servers, user administration
 - [x] part 5 - Testing React apps
-- [ ] part 6 - Advanced state management
+- [x] part 6 - Advanced state management
 - [ ] part 7 - React router, custom hooks, styling app with CSS and webpack
 - [ ] part 8 - GraphQL
 - [ ] part 9 - Typescript
