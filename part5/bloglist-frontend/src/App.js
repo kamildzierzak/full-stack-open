@@ -34,7 +34,7 @@ const App = () => {
     }
   }, [])
 
-  const handleLogin = async userObject => {
+  const handleLogin = async (userObject) => {
     try {
       const user = await loginService.login(userObject)
 
@@ -53,7 +53,7 @@ const App = () => {
     }
   }
 
-  const handleLogout = async event => {
+  const handleLogout = async (event) => {
     event.preventDefault()
 
     try {
@@ -72,7 +72,7 @@ const App = () => {
     }
   }
 
-  const addBlog = async blogObject => {
+  const addBlog = async (blogObject) => {
     try {
       blogFormRef.current.toggleVisibility()
       const newBlog = await blogService.create(blogObject)
@@ -118,7 +118,7 @@ const App = () => {
     }
   }
 
-  const deleteBlog = async id => {
+  const deleteBlog = async (id) => {
     try {
       await blogService.deleteOne(id)
 
@@ -166,7 +166,7 @@ const App = () => {
       <div id="blogs">
         {blogs
           .sort((blogA, blogB) => blogB.likes - blogA.likes)
-          .map(blog => (
+          .map((blog) => (
             <Blog
               key={blog.id}
               blog={blog}

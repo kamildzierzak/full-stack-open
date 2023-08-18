@@ -3,7 +3,7 @@ import { useState } from 'react'
 const Blog = ({ blog, updateLikes, deleteBlog, user }) => {
   const [visibleDetails, setVisibleDetails] = useState(false)
 
-  const incrementLikes = blog => {
+  const incrementLikes = (blog) => {
     updateLikes(blog.id, {
       user: blog.user.id,
       likes: (blog.likes += 1),
@@ -13,9 +13,9 @@ const Blog = ({ blog, updateLikes, deleteBlog, user }) => {
     })
   }
 
-  const removeBlog = blog => {
+  const removeBlog = (blog) => {
     const result = window.confirm(
-      `Do you really want to remove ${blog.name} by ${blog.author}?`
+      `Do you really want to remove ${blog.name} by ${blog.author}?`,
     )
 
     if (result) {

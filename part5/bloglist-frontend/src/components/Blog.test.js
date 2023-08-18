@@ -26,7 +26,7 @@ describe('<Blog />', () => {
     mockUpdateLikesHandler = jest.fn()
 
     render(
-      <Blog blog={blog} user={user} updateLikes={mockUpdateLikesHandler} />
+      <Blog blog={blog} user={user} updateLikes={mockUpdateLikesHandler} />,
     )
   })
 

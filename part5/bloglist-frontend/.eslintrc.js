@@ -2,6 +2,7 @@
 module.exports = {
   env: {
     browser: true,
+    node: true,
     es6: true,
     'jest/globals': true,
     'cypress/globals': true,
@@ -17,7 +18,7 @@ module.exports = {
   plugins: ['react', 'jest', 'cypress'],
   rules: {
     indent: ['error', 2],
-    'linebreak-style': ['error', 'windows'],
+    'linebreak-style': ['error', 'unix'],
     quotes: ['error', 'single'],
     semi: ['error', 'never'],
     eqeqeq: 'error',
