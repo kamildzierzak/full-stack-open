@@ -1,16 +1,15 @@
 import { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { deleteBlog } from '../reducers/blogReducer'
+import { setNotification } from '../reducers/notificationReducer'
+import { like } from '../reducers/blogReducer'
 
-const Blog = ({ blog, updateLikes, deleteBlog, user }) => {
+const Blog = ({ blog, user }) => {
+  const dispatch = useDispatch()
   const [visibleDetails, setVisibleDetails] = useState(false)
 
-  const incrementLikes = (blog) => {
-    updateLikes(blog.id, {
-      user: blog.user.id,
-      likes: (blog.likes += 1),
-      author: blog.author,
-      title: blog.title,
-      url: blog.url,
-    })
+  const likeBlog = (blog) => {
+    dispatch(like(blog.id))
   }
 
   const removeBlog = (blog) => {
@@ -19,7 +18,17 @@ const Blog = ({ blog, updateLikes, deleteBlog, user }) => {
     )
 
     if (result) {
-      deleteBlog(blog.id)
+      const id = blog.id
+      dispatch(deleteBlog(id))
+      dispatch(
+        setNotification(
+          {
+            text: `blog with id: ${id} has been deleted`,
+            type: 'success',
+          },
+          5,
+        ),
+      )
     }
   }
 
@@ -46,12 +55,12 @@ const Blog = ({ blog, updateLikes, deleteBlog, user }) => {
           <p>{blog.url}</p>
           <p>
             likes {blog.likes}{' '}
-            <button id="likeButton" onClick={() => incrementLikes(blog)}>
+            <button id="likeButton" onClick={() => likeBlog(blog)}>
               like
             </button>
           </p>
           <p>{blog.user.name}</p>
-          {user.username === blog.user.username ? (
+          {user.user.username === blog.user.username ? (
             <button
               id="deleteButton"
               style={deleteButtonStyle}

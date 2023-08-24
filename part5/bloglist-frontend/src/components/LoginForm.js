@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Notification } from './Notification'
 import PropTypes from 'prop-types'
 
-const LoginForm = ({ loginUser, message }) => {
+const LoginForm = ({ loginUser }) => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
@@ -17,7 +17,7 @@ const LoginForm = ({ loginUser, message }) => {
   return (
     <div>
       <h2>Log in to application</h2>
-      <Notification message={message} />
+      <Notification />
       <form onSubmit={handleLogin}>
         <div>
           Username
