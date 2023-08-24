@@ -6,12 +6,15 @@ import loginService from './services/login'
 import CreateBlogForm from './components/CreateBlogForm'
 import Togglable from './components/Togglable'
 import LoginForm from './components/LoginForm'
+import { useDispatch } from 'react-redux'
+import { setNotification } from './reducers/notificationReducer'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
   const [message, setMessage] = useState(null)
   const blogFormRef = useRef()
+  const dispatch = useDispatch()
 
   useEffect(() => {
     const getBlogs = async () => {
@@ -42,13 +45,15 @@ const App = () => {
       blogService.setToken(user.token)
       setUser(user)
     } catch (exception) {
-      setMessage({
-        text: 'Wrong username or password',
-        type: 'error',
-      })
-      setTimeout(() => {
-        setMessage(null)
-      }, 5000)
+      dispatch(
+        setNotification(
+          {
+            text: 'Wrong username or password',
+            type: 'error',
+          },
+          5,
+        ),
+      )
       console.log(exception)
     }
   }
@@ -59,14 +64,15 @@ const App = () => {
     try {
       window.localStorage.removeItem('loggedBloglistUser')
       setUser(null)
-
-      setMessage({
-        text: 'You have been successfully logged out.',
-        type: 'success',
-      })
-      setTimeout(() => {
-        setMessage(null)
-      }, 5000)
+      dispatch(
+        setNotification(
+          {
+            text: 'You have been successfully logged out.',
+            type: 'success',
+          },
+          5,
+        ),
+      )
     } catch (exception) {
       console.log(exception)
     }
@@ -80,23 +86,24 @@ const App = () => {
       const updatedBlogs = await blogService.getAll()
       setBlogs(updatedBlogs)
 
-      setMessage({
-        text: `a new blog ${newBlog.title} by ${newBlog.author} added`,
-        type: 'success',
-      })
-
-      setTimeout(() => {
-        setMessage(null)
-      }, 5000)
+      dispatch(
+        setNotification(
+          {
+            text: `a new blog ${newBlog.title} by ${newBlog.author} added`,
+            type: 'success',
+          },
+          5,
+        ),
+      )
     } catch (exception) {
-      setMessage({
-        text: 'Title, author and url must be provided',
-        type: 'error',
-      })
+      dispatch(
+        setNotification({
+          text: 'Title, author and url must be provided',
+          type: 'error',
+        }),
+        5,
+      )
 
-      setTimeout(() => {
-        setMessage(null)
-      }, 5000)
       console.log(exception)
     }
   }
@@ -107,14 +114,15 @@ const App = () => {
       const updatedBlogs = await blogService.getAll()
       setBlogs(updatedBlogs)
     } catch (exception) {
-      setMessage({
-        text: 'Something went wrong with liking :(',
-        type: 'error',
-      })
-
-      setTimeout(() => {
-        setMessage(null)
-      }, 5000)
+      dispatch(
+        setNotification(
+          {
+            text: 'Something went wrong with liking :(',
+            type: 'error',
+          },
+          5,
+        ),
+      )
     }
   }
 
@@ -125,14 +133,15 @@ const App = () => {
       const updatedBlogs = await blogService.getAll()
       setBlogs(updatedBlogs)
 
-      setMessage({
-        text: `blog with id: ${id} has been deleted`,
-        type: 'success',
-      })
-
-      setTimeout(() => {
-        setMessage(null)
-      }, 5000)
+      dispatch(
+        setNotification(
+          {
+            text: `blog with id: ${id} has been deleted`,
+            type: 'success',
+          },
+          5,
+        ),
+      )
     } catch (exception) {
       setMessage({
         text: 'Cannot delete',
@@ -151,7 +160,7 @@ const App = () => {
 
   return (
     <div>
-      <Notification message={message} />
+      <Notification />
       <h2>blogs</h2>
       <p>
         {user.name} logged in{' '}
