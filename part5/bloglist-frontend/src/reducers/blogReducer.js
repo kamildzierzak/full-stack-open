@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import blogService from '../services/blogs'
+import { setNotification } from './notificationReducer'
 
 const blogSlice = createSlice({
   name: 'blogs',
@@ -47,6 +48,15 @@ export const deleteBlog = (id) => {
   return async (dispatch) => {
     await blogService.deleteOne(id)
     dispatch(initializeBlogs())
+    dispatch(
+      setNotification(
+        {
+          text: `Blog ${id} has been deleted`,
+          type: 'success',
+        },
+        5,
+      ),
+    )
   }
 }
 

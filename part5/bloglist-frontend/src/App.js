@@ -1,19 +1,17 @@
-import { useState, useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { Notification } from './components/Notification'
-import blogService from './services/blogs'
-import loginService from './services/login'
 import CreateBlogForm from './components/CreateBlogForm'
 import Togglable from './components/Togglable'
 import LoginForm from './components/LoginForm'
-import { useDispatch } from 'react-redux'
-import { setNotification } from './reducers/notificationReducer'
-import { initializeBlogs } from './reducers/blogReducer'
 import BlogList from './components/BlogList'
+import { initializeBlogs } from './reducers/blogReducer'
+import { setUserFromLocalStorage, logoutUser } from './reducers/userReducer'
 
 const App = () => {
-  const [user, setUser] = useState(null)
-  const blogFormRef = useRef()
   const dispatch = useDispatch()
+  const user = useSelector((state) => state.user)
+  const blogFormRef = useRef()
 
   useEffect(() => {
     if (user !== null) {
@@ -26,54 +24,12 @@ const App = () => {
 
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
-      setUser(user)
-      blogService.setToken(user.token)
+      dispatch(setUserFromLocalStorage(user))
     }
-  }, [])
-
-  const handleLogin = async (userObject) => {
-    try {
-      const user = await loginService.login(userObject)
-
-      window.localStorage.setItem('loggedBloglistUser', JSON.stringify(user))
-      blogService.setToken(user.token)
-      setUser(user)
-    } catch (exception) {
-      dispatch(
-        setNotification(
-          {
-            text: 'Wrong username or password',
-            type: 'error',
-          },
-          5,
-        ),
-      )
-      console.log(exception)
-    }
-  }
-
-  const handleLogout = async (event) => {
-    event.preventDefault()
-
-    try {
-      window.localStorage.removeItem('loggedBloglistUser')
-      setUser(null)
-      dispatch(
-        setNotification(
-          {
-            text: 'You have been successfully logged out.',
-            type: 'success',
-          },
-          5,
-        ),
-      )
-    } catch (exception) {
-      console.log(exception)
-    }
-  }
+  }, [dispatch])
 
   if (user === null) {
-    return <LoginForm loginUser={handleLogin} />
+    return <LoginForm />
   }
 
   return (
@@ -82,7 +38,11 @@ const App = () => {
       <h2>blogs</h2>
       <p>
         {user.name} logged in{' '}
-        <button id="logout-button" onClick={handleLogout} type="submit">
+        <button
+          id="logout-button"
+          onClick={() => dispatch(logoutUser())}
+          type="submit"
+        >
           Logout
         </button>
       </p>
