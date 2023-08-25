@@ -5,8 +5,11 @@ import CreateBlogForm from './components/CreateBlogForm'
 import Togglable from './components/Togglable'
 import LoginForm from './components/LoginForm'
 import BlogList from './components/BlogList'
+import UsersView from './components/UsersView'
 import { initializeBlogs } from './reducers/blogReducer'
 import { setUserFromLocalStorage, logoutUser } from './reducers/userReducer'
+import { initializeUsers } from './reducers/usersReducer'
+import { Routes, Route } from 'react-router-dom'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -16,6 +19,7 @@ const App = () => {
   useEffect(() => {
     if (user !== null) {
       dispatch(initializeBlogs())
+      dispatch(initializeUsers())
     }
   }, [user, dispatch])
 
@@ -50,7 +54,10 @@ const App = () => {
         <CreateBlogForm />
       </Togglable>
       <br />
-      <BlogList user={user} />
+      <Routes>
+        <Route path="/users" element={<UsersView />} />
+        <Route path="/" element={<BlogList user={user} />} />
+      </Routes>
     </div>
   )
 }
