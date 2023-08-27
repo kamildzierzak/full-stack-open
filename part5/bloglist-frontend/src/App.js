@@ -7,6 +7,7 @@ import LoginForm from './components/LoginForm'
 import BlogList from './components/BlogList'
 import UsersView from './components/UsersView'
 import UserView from './components/UserView'
+import BlogView from './components/BlogView'
 import { initializeBlogs } from './reducers/blogReducer'
 import { setUserFromLocalStorage, logoutUser } from './reducers/userReducer'
 import { initializeUsers } from './reducers/usersReducer'
@@ -16,8 +17,10 @@ const App = () => {
   const dispatch = useDispatch()
   const user = useSelector((state) => state.user)
   const users = useSelector((state) => state.users)
+  const blogs = useSelector((state) => state.blogs)
   const blogFormRef = useRef()
-  const match = useMatch('/users/:id')
+  const matchUser = useMatch('/users/:id')
+  const matchBlog = useMatch('/blogs/:id')
 
   useEffect(() => {
     if (user !== null) {
@@ -35,7 +38,13 @@ const App = () => {
     }
   }, [dispatch])
 
-  const userById = match ? users.find((u) => u.id === match.params.id) : null
+  const userById = matchUser
+    ? users.find((u) => u.id === matchUser.params.id)
+    : null
+
+  const blogById = matchBlog
+    ? blogs.find((b) => b.id === matchBlog.params.id)
+    : null
 
   if (user === null) {
     return <LoginForm />
@@ -62,7 +71,11 @@ const App = () => {
       <Routes>
         <Route path="/users/:id" element={<UserView user={userById} />} />
         <Route path="/users" element={<UsersView />} />
-        <Route path="/" element={<BlogList user={user} />} />
+        <Route
+          path="/blogs/:id"
+          element={<BlogView blog={blogById} user={user} />}
+        />
+        <Route path="/" element={<BlogList />} />
       </Routes>
     </div>
   )
