@@ -6,15 +6,18 @@ import Togglable from './components/Togglable'
 import LoginForm from './components/LoginForm'
 import BlogList from './components/BlogList'
 import UsersView from './components/UsersView'
+import UserView from './components/UserView'
 import { initializeBlogs } from './reducers/blogReducer'
 import { setUserFromLocalStorage, logoutUser } from './reducers/userReducer'
 import { initializeUsers } from './reducers/usersReducer'
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, useMatch } from 'react-router-dom'
 
 const App = () => {
   const dispatch = useDispatch()
   const user = useSelector((state) => state.user)
+  const users = useSelector((state) => state.users)
   const blogFormRef = useRef()
+  const match = useMatch('/users/:id')
 
   useEffect(() => {
     if (user !== null) {
@@ -31,6 +34,8 @@ const App = () => {
       dispatch(setUserFromLocalStorage(user))
     }
   }, [dispatch])
+
+  const userById = match ? users.find((u) => u.id === match.params.id) : null
 
   if (user === null) {
     return <LoginForm />
@@ -55,6 +60,7 @@ const App = () => {
       </Togglable>
       <br />
       <Routes>
+        <Route path="/users/:id" element={<UserView user={userById} />} />
         <Route path="/users" element={<UsersView />} />
         <Route path="/" element={<BlogList user={user} />} />
       </Routes>
