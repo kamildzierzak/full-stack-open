@@ -61,6 +61,16 @@ const BlogView = ({ blog, user }) => {
             remove
           </button>
         ) : null}
+        {blog.comments ? (
+          <>
+            <h3>comments</h3>
+            <ul>
+              {blog.comments.map((comment, index) => (
+                <li key={index}>{comment}</li> //not reccomended to use index as key but i'll leave it 4now
+              ))}
+            </ul>
+          </>
+        ) : null}
       </div>
     </div>
   )
