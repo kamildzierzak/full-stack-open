@@ -1,13 +1,12 @@
-import { useEffect, useRef } from 'react'
+import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Notification } from './components/Notification'
-import CreateBlogForm from './components/CreateBlogForm'
-import Togglable from './components/Togglable'
 import LoginForm from './components/LoginForm'
 import BlogList from './components/BlogList'
 import UsersView from './components/UsersView'
 import UserView from './components/UserView'
 import BlogView from './components/BlogView'
+import NavBar from './components/NavBar'
 import { initializeBlogs } from './reducers/blogReducer'
 import { setUserFromLocalStorage, logoutUser } from './reducers/userReducer'
 import { initializeUsers } from './reducers/usersReducer'
@@ -18,7 +17,7 @@ const App = () => {
   const user = useSelector((state) => state.user)
   const users = useSelector((state) => state.users)
   const blogs = useSelector((state) => state.blogs)
-  const blogFormRef = useRef()
+
   const matchUser = useMatch('/users/:id')
   const matchBlog = useMatch('/blogs/:id')
 
@@ -52,22 +51,9 @@ const App = () => {
 
   return (
     <div>
+      <NavBar user={user} logoutHandler={logoutUser} />
       <Notification />
-      <h2>blogs</h2>
-      <p>
-        {user.name} logged in{' '}
-        <button
-          id="logout-button"
-          onClick={() => dispatch(logoutUser())}
-          type="submit"
-        >
-          Logout
-        </button>
-      </p>
-      <Togglable buttonLabel={'New blog'} ref={blogFormRef}>
-        <CreateBlogForm />
-      </Togglable>
-      <br />
+      <h2>blog app</h2>
       <Routes>
         <Route path="/users/:id" element={<UserView user={userById} />} />
         <Route path="/users" element={<UsersView />} />
