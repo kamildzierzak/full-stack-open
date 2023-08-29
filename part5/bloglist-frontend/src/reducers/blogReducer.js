@@ -60,4 +60,11 @@ export const deleteBlog = (id) => {
   }
 }
 
+export const createComment = (id, comment) => {
+  return async (dispatch) => {
+    await blogService.addComment(id, comment)
+    dispatch(initializeBlogs())
+  }
+}
+
 export default blogSlice.reducer

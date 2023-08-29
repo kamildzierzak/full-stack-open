@@ -1,10 +1,14 @@
+import { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { deleteBlog } from '../reducers/blogReducer'
+import { useNavigate } from 'react-router-dom'
+import { deleteBlog, createComment } from '../reducers/blogReducer'
 import { setNotification } from '../reducers/notificationReducer'
 import { like } from '../reducers/blogReducer'
 
 const BlogView = ({ blog, user }) => {
   const dispatch = useDispatch()
+  const navigate = useNavigate()
+  const [comment, setComment] = useState('')
 
   const likeBlog = (blog) => {
     dispatch(like(blog.id))
@@ -27,7 +31,16 @@ const BlogView = ({ blog, user }) => {
           5,
         ),
       )
+      navigate('/')
     }
+  }
+
+  const addComment = (event) => {
+    event.preventDefault()
+    const id = blog.id
+
+    dispatch(createComment(id, { comment }))
+    setComment('')
   }
 
   const deleteButtonStyle = {
@@ -58,9 +71,21 @@ const BlogView = ({ blog, user }) => {
             style={deleteButtonStyle}
             onClick={() => removeBlog(blog)}
           >
-            remove
+            remove blog
           </button>
         ) : null}
+        <div>
+          <form onSubmit={addComment}>
+            <input
+              type="text"
+              value={comment}
+              name="Comment"
+              placeholder="write a comment"
+              onChange={({ target }) => setComment(target.value)}
+            ></input>
+            <button type="submit">add comment</button>
+          </form>
+        </div>
         {blog.comments ? (
           <>
             <h3>comments</h3>
