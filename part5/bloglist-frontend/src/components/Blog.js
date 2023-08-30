@@ -1,18 +1,22 @@
-const Blog = ({ blog }) => {
-  const blogStyle = {
-    paddingTop: 10,
-    paddingLeft: 2,
-    border: 'solid',
-    borderWidth: 1,
-    marginBottom: 5,
-  }
+import { Link } from 'react-router-dom'
+import ListGroup from 'react-bootstrap/ListGroup'
+import Badge from 'react-bootstrap/Badge'
 
+const Blog = ({ blog }) => {
   return (
-    <div style={blogStyle}>
-      <div className="blogBasicInfo">
-        {blog.title} {blog.author}
+    <ListGroup.Item
+      as={Link}
+      to={`/blogs/${blog.id}`}
+      className="d-flex justify-content-between align-items-start"
+    >
+      <div className="ms-2 me-auto">
+        <div className="fw-bold">{blog.title}</div>
+        {blog.author}
       </div>
-    </div>
+      <Badge bg="primary" pill>
+        {blog.likes} likes
+      </Badge>
+    </ListGroup.Item>
   )
 }
 

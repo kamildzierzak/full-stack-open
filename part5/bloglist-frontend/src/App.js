@@ -53,7 +53,6 @@ const App = () => {
     <div>
       <NavBar user={user} logoutHandler={logoutUser} />
       <Notification />
-      <h2>blog app</h2>
       <Routes>
         <Route path="/users/:id" element={<UserView user={userById} />} />
         <Route path="/users" element={<UsersView />} />

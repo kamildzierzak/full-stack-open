@@ -2,6 +2,8 @@ import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { createBlog } from '../reducers/blogReducer'
 import { setNotification } from '../reducers/notificationReducer'
+import Button from 'react-bootstrap/Button'
+import Form from 'react-bootstrap/Form'
 
 const CreateBlogForm = () => {
   const dispatch = useDispatch()
@@ -35,47 +37,47 @@ const CreateBlogForm = () => {
   }
 
   return (
-    <div>
-      <h2>create new</h2>
-      <form onSubmit={addBlog}>
-        <div>
-          Title:
-          <input
+    <>
+      <h2 className="mt-3">Create new blog</h2>
+      <Form onSubmit={addBlog}>
+        <Form.Group className="mb-3 mt-3">
+          <Form.Label>Title</Form.Label>
+          <Form.Control
             id="title"
             type="text"
             value={title}
             name="Title"
-            placeholder="write title here"
+            placeholder="Enter title"
             onChange={({ target }) => setTitle(target.value)}
-          ></input>
-        </div>
-        <div>
-          Author:
-          <input
+          ></Form.Control>
+        </Form.Group>
+        <Form.Group className="mb-3 mt-3">
+          <Form.Label>Author</Form.Label>
+          <Form.Control
             id="author"
             type="text"
             value={author}
             name="Author"
-            placeholder="write author here"
+            placeholder="Enter author"
             onChange={({ target }) => setAuthor(target.value)}
-          ></input>
-        </div>
-        <div>
-          URL:
-          <input
+          ></Form.Control>
+        </Form.Group>
+        <Form.Group className="mb-3 mt-3">
+          <Form.Label>URL</Form.Label>
+          <Form.Control
             id="url"
             type="text"
             value={url}
             name="Url"
-            placeholder="write url here"
+            placeholder="Enter url"
             onChange={({ target }) => setUrl(target.value)}
-          ></input>
-        </div>
-        <button id="create-button" type="submit">
+          ></Form.Control>
+        </Form.Group>
+        <Button id="create-button" type="submit" className="mt-1">
           Create
-        </button>
-      </form>
-    </div>
+        </Button>
+      </Form>
+    </>
   )
 }
 

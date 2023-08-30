@@ -7,7 +7,7 @@
 - [x] part 4 - Testing Express servers, user administration
 - [x] part 5 - Testing React apps
 - [x] part 6 - Advanced state management
-- [ ] part 7 - React router, custom hooks, styling app with CSS and webpack
+- [x] part 7 - React router, custom hooks, styling app with CSS and webpack
 - [ ] part 8 - GraphQL
 - [ ] part 9 - Typescript
 - [ ] part 10 - React Native

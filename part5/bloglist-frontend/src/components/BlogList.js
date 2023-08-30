@@ -1,9 +1,11 @@
 import { useRef } from 'react'
 import { useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
+
 import Blog from './Blog'
 import CreateBlogForm from './CreateBlogForm'
 import Togglable from './Togglable'
+import Container from 'react-bootstrap/Container'
+import ListGroup from 'react-bootstrap/ListGroup'
 
 const BlogList = () => {
   const blogFormRef = useRef()
@@ -15,15 +17,15 @@ const BlogList = () => {
         <CreateBlogForm />
       </Togglable>
       <br />
-      <div id="blogs">
-        {[...blogs]
-          .sort((blogA, blogB) => blogB.likes - blogA.likes)
-          .map((blog) => (
-            <Link key={blog.id} to={`/blogs/${blog.id}`}>
-              <Blog blog={blog} />
-            </Link>
-          ))}
-      </div>
+      <Container>
+        <ListGroup id="blogs" as="ol" numbered>
+          {[...blogs]
+            .sort((blogA, blogB) => blogB.likes - blogA.likes)
+            .map((blog) => (
+              <Blog key={blog.id} blog={blog} />
+            ))}
+        </ListGroup>
+      </Container>
     </>
   )
 }

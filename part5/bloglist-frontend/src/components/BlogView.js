@@ -4,6 +4,12 @@ import { useNavigate } from 'react-router-dom'
 import { deleteBlog, createComment } from '../reducers/blogReducer'
 import { setNotification } from '../reducers/notificationReducer'
 import { like } from '../reducers/blogReducer'
+import Container from 'react-bootstrap/Container'
+import ListGroup from 'react-bootstrap/ListGroup'
+import Button from 'react-bootstrap/Button'
+import Form from 'react-bootstrap/Form'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
 
 const BlogView = ({ blog, user }) => {
   const dispatch = useDispatch()
@@ -52,52 +58,67 @@ const BlogView = ({ blog, user }) => {
   }
 
   return (
-    <div>
+    <Container className="mt-3">
       <h2>{blog.title}</h2>
-      <div className="blogDetailedInfo">
-        <a href={'https://' + blog.url} target="_blank" rel="noreferrer">
-          {blog.url}
-        </a>
-        <p>
-          {blog.likes} likes{' '}
-          <button id="likeButton" onClick={() => likeBlog(blog)}>
-            like
-          </button>
-        </p>
-        <p>added by {blog.user.name}</p>
-        {user.username === blog.user.username ? (
-          <button
-            id="deleteButton"
-            style={deleteButtonStyle}
-            onClick={() => removeBlog(blog)}
-          >
-            remove blog
-          </button>
-        ) : null}
-        <div>
-          <form onSubmit={addComment}>
-            <input
-              type="text"
-              value={comment}
-              name="Comment"
-              placeholder="write a comment"
-              onChange={({ target }) => setComment(target.value)}
-            ></input>
-            <button type="submit">add comment</button>
-          </form>
+      <Container className="blogDetailedInfo p-0">
+        <Row className="align-items-center mt-3 h5">
+          <Col>
+            <a href={'https://' + blog.url} target="_blank" rel="noreferrer">
+              {blog.url}
+            </a>
+          </Col>
+          <Col className="text-end">
+            {blog.likes} likes
+            <Button
+              className="ms-3"
+              id="likeButton"
+              onClick={() => likeBlog(blog)}
+            >
+              Like
+            </Button>
+          </Col>
+        </Row>
+        <Row className="align-items-center mt-3">
+          <Col>added by {blog.user.name}</Col>
+          {user.username === blog.user.username ? (
+            <Col className="text-end">
+              <Button
+                id="deleteButton"
+                style={deleteButtonStyle}
+                onClick={() => removeBlog(blog)}
+                variant="danger"
+              >
+                Remove
+              </Button>
+            </Col>
+          ) : null}
+        </Row>
+      </Container>
+      <Form onSubmit={addComment} className="mt-5 d-flex flex-column">
+        <Form.Control
+          type="text"
+          value={comment}
+          name="Comment"
+          placeholder="Write a comment"
+          onChange={({ target }) => setComment(target.value)}
+        ></Form.Control>
+        <div className="d-flex justify-content-end">
+          <Button type="submit" className="mt-3">
+            Add comment
+          </Button>
         </div>
-        {blog.comments ? (
-          <>
-            <h3>comments</h3>
-            <ul>
-              {blog.comments.map((comment, index) => (
-                <li key={index}>{comment}</li> //not reccomended to use index as key but i'll leave it 4now
-              ))}
-            </ul>
-          </>
-        ) : null}
-      </div>
-    </div>
+      </Form>
+      {blog.comments ? (
+        <>
+          <h3 className="mt-3">Comments</h3>
+          <ListGroup>
+            {blog.comments.map((comment, index) => (
+              <li key={index}>{comment}</li> //not reccomended to use index as key but i'll leave it 4now
+            ))}
+          </ListGroup>
+        </>
+      ) : null}
+    </Container>
   )
 }
 

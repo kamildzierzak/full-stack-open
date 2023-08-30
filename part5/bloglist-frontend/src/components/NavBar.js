@@ -1,9 +1,9 @@
-import { NavLink } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
 import Container from 'react-bootstrap/Container'
 import Nav from 'react-bootstrap/Nav'
 import Navbar from 'react-bootstrap/Navbar'
 import Button from 'react-bootstrap/Button'
+import { NavLink } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
 
 const NavBar = ({ user, logoutHandler }) => {
   const dispatch = useDispatch()
@@ -36,7 +36,7 @@ const NavBar = ({ user, logoutHandler }) => {
               <b>{user.name}</b> logged in
             </Navbar.Text>
             <Button
-              variant="outline-primary"
+              variant="outline-danger"
               id="logout-button"
               onClick={() => dispatch(logoutHandler())}
               type="submit"

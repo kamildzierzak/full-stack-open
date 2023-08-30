@@ -2,6 +2,9 @@ import { useState } from 'react'
 import { Notification } from './Notification'
 import { loginUser } from '../reducers/userReducer'
 import { useDispatch } from 'react-redux'
+import Container from 'react-bootstrap/Container'
+import Button from 'react-bootstrap/Button'
+import Form from 'react-bootstrap/Form'
 
 const LoginForm = () => {
   const dispatch = useDispatch()
@@ -17,35 +20,38 @@ const LoginForm = () => {
   }
 
   return (
-    <div>
-      <h2>Log in to application</h2>
+    <Container className="mt-5">
       <Notification />
-      <form onSubmit={handleLogin}>
-        <div>
-          Username
-          <input
+      <h2>Log in to application</h2>
+      <Form onSubmit={handleLogin}>
+        <Form.Group className="mb-3 mt-3">
+          <Form.Label>Username</Form.Label>
+          <Form.Control
             id="username"
             type="text"
             value={username}
             name="Username"
+            placeholder="Enter username"
             onChange={({ target }) => setUsername(target.value)}
           />
-        </div>
-        <div>
-          Password
-          <input
+        </Form.Group>
+        <Form.Group className="mb-3">
+          <Form.Label>Password</Form.Label>
+          <Form.Control
             id="password"
             type="password"
             value={password}
             name="Password"
+            placeholder="Password"
             onChange={({ target }) => setPassword(target.value)}
           />
-        </div>
-        <button id="login-button" type="submit">
+        </Form.Group>
+
+        <Button id="login-button" type="submit">
           Login
-        </button>
-      </form>
-    </div>
+        </Button>
+      </Form>
+    </Container>
   )
 }
 
